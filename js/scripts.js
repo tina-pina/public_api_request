@@ -1,5 +1,5 @@
 
-/* retrieve data for 12 employees */
+/* retrieve data for 12 random employees from the API */
 
 fetch("https://randomuser.me/api/?results=12")
     .then(result => result.json())
@@ -9,15 +9,15 @@ fetch("https://randomuser.me/api/?results=12")
 
 let galleryDiv = document.getElementById("gallery")
 
+/* show each employee`s card on the page */
 function displayCard(data) {
     let arrayEmployees = data.results
+    /* iterate over array of employees -> get info for each employee */
     arrayEmployees.forEach((employee, index) => {
+
+        /* create DOM and fill with info for each employee */
         let cardDiv = document.createElement('div')
         cardDiv.className = `card`
-
-        /* open modal for one clicked employee */
-        cardDiv.addEventListener("click", () => displayModal(arrayEmployees[index]))
-
         cardDiv.innerHTML = `
             <div class="card-img-container">
                 <img class="card-img" src="${employee.picture.medium}" alt="profile picture">
@@ -28,14 +28,22 @@ function displayCard(data) {
                 <p class="card-text cap">${employee.location.city}</p>
             </div>
         `
+
+        /* open modal for one clicked employee */
+        cardDiv.addEventListener("click", () => displayModal(arrayEmployees[index]))
+
         galleryDiv.appendChild(cardDiv)
     })
 }
 
+/* when clicking on an employee`s card open a modal with extra info */
 function displayModal(employee) {
+
+    /* create modal for one employee and fill with info */
     let modalContainer = document.createElement('div')
     modalContainer.className = 'modal-container'
 
+    /* format date from API to display birthday info for employee */
     let dob = new Date(employee.dob.date)
     let dobString = `${dob.getDate()}/${dob.getMonth()}/${dob.getFullYear()}`
 
@@ -54,8 +62,10 @@ function displayModal(employee) {
             </div>
         </div>
     `
+
     galleryDiv.appendChild(modalContainer)
 
+    /* remove modal if user clicks on button to close modal*/
     let closeButton = document.getElementById("modal-close-btn")
     closeButton.addEventListener("click", () => modalContainer.remove())
 
